@@ -7,8 +7,22 @@ from logs_api_http_extension.http_listener import http_server_init, RECEIVER_POR
 from logs_api_http_extension.logs_api_client import LogsAPIClient
 from logs_api_http_extension.extensions_api_client import ExtensionsAPIClient
 from queue import Queue
-from logs_api_http_extension.loki_push_fun import push_multi_logs
-import json
+
+
+# from logs_api_http_extension.loki_push_fun import push_multi_logs as loki_push_logs
+from logs_api_http_extension.kds_fun import put_record as kds_put_record
+
+# import json
+
+# import sys
+# import subprocess
+
+# subprocess.call(
+#     "pip install boto3 -t /tmp/ --no-cache-dir".split(),
+#     stdout=subprocess.DEVNULL,
+#     stderr=subprocess.DEVNULL,
+# )
+# sys.path.insert(1, "/tmp/")
 
 
 class LogsAPIHTTPExtension:
@@ -35,8 +49,9 @@ class LogsAPIHTTPExtension:
             # Process the received batches if any.
             while not self.queue.empty():
                 batch = self.queue.get_nowait()
-                # print(f"Received batch {batch}")
-                push_multi_logs(batch)
+                print(f"Received batch {batch}")
+                kds_put_record(batch)
+                # loki_push_logs(batch)
 
 
 # Register for the INVOKE events from the EXTENSIONS API
@@ -67,8 +82,9 @@ _SUBSCRIPTION_BODY = {
 def main():
     print(f"Starting Extensions {_REGISTRATION_BODY} {_SUBSCRIPTION_BODY}")
     # Note: Agent name has to be file name to register as an external extension
+    # os.path.basename(__file__)
     ext = LogsAPIHTTPExtension(
-        os.path.basename(__file__), _REGISTRATION_BODY, _SUBSCRIPTION_BODY
+        "loki-kds-extension", _REGISTRATION_BODY, _SUBSCRIPTION_BODY
     )
     ext.run_forever()
 

@@ -11,15 +11,15 @@ Globals:
     Timeout: 30
 
 Resources:
-  HelloLokiExtensionLayer:
-    Type: AWS::Serverless::LayerVersion
-    Metadata:
-      BuildMethod: makefile
-    Properties:
-      LayerName: hello-loki-extension
-      Description: Logs push to loki
-      ContentUri: .
-      RetentionPolicy: Delete
+  # HelloLokiExtensionLayer:
+  #   Type: AWS::Serverless::LayerVersion
+  #   Metadata:
+  #     BuildMethod: makefile
+  #   Properties:
+  #     LayerName: hello-loki-extension
+  #     Description: Logs push to loki
+  #     ContentUri: .
+  #     RetentionPolicy: Delete
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -28,8 +28,9 @@ Resources:
       Runtime: python3.10
       MemorySize: 128
       Timeout: 100
-      Layers:
-        - !Ref HelloLokiExtensionLayer
+      # Layers:
+      #   - arn:aws:lambda:us-west-2:320236118172:layer:loki-kds-layer:24
+      # - !Ref HelloLokiExtensionLayer
       Architectures:
         - arm64
       Events:
@@ -38,11 +39,21 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+      Policies:
+        - Statement:
+            - Sid: KinesisStreamFullAccess
+              Effect: Allow
+              Action:
+                - kinesis:PutRecord*
+                - kinesis:Get*
+                - kinesis:List*
+                - kinesis:Describe*
+              Resource: arn:aws:kinesis:us-west-2:*:stream/*
 
 Outputs:
-  HelloLokiExtensionLayer:
-    Description: Python Example Lambda Extension Layer Version ARN
-    Value: !Ref HelloLokiExtensionLayer
+  # HelloLokiExtensionLayer:
+  #   Description: Python Example Lambda Extension Layer Version ARN
+  #   Value: !Ref HelloLokiExtensionLayer
   HelloWorldApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"

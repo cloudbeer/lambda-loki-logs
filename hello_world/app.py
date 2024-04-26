@@ -1,11 +1,13 @@
 import json
 
-# import requests
+# import boto3
 
 
 def lambda_handler(event, context):
 
     print(f"some logs 001 to console.")
+
+    # print("boto3 version" + str(boto3.__version__))
 
     print(f"some logs 002 to console.")
 
