@@ -34,8 +34,6 @@ echo "更新配置 aws lambda update-function-configuration"
 aws lambda update-function-configuration \
     --function-name lambda-loki-logs-HelloWorldFunction-y3EcDI21TMKY \
     --region us-west-2 \
-    --layers  arn:aws:lambda:us-west-2:320236118172:layer:loki-kds-ext-layer:5 \
-              arn:aws:lambda:us-west-2:320236118172:layer:loki-kds-layer:30
+    --layers  arn:aws:lambda:us-west-2:320236118172:layer:loki-kds-ext-layer:7 \
+              arn:aws:lambda:us-west-2:320236118172:layer:loki-kds-layer:32
             
-
-

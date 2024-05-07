@@ -246,3 +246,5 @@ $RECYCLE.BIN/
 events/
 tests/
 loki-kds-extension/loki-kds-extension/
+
+*/.terraform

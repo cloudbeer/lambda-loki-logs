@@ -9,7 +9,7 @@ from logs_api_http_extension.extensions_api_client import ExtensionsAPIClient
 from queue import Queue
 
 
-# from logs_api_http_extension.loki_push_fun import push_multi_logs as loki_push_logs
+from logs_api_http_extension.loki_push_fun import push_multi_logs as loki_push_logs
 from logs_api_http_extension.kds_fun import put_record as kds_put_record
 
 # import json
